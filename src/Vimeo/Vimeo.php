@@ -368,7 +368,7 @@ class Vimeo
      * @throws VimeoRequestException
      * @throws VimeoUploadException
      */
-    public function replace($video_uri, $file_path, array $params = array())
+    public function replace($video_uri, $file_path, array $params = array(), array $options = array())
     {
         //  Validate that our file is real.
         if (!is_file($file_path)) {
@@ -394,7 +394,7 @@ class Vimeo
         // `uri` doesn't come back from `/videos/:id/versions` so we need to manually set it here for uploading.
         $attempt['body']['uri'] = $video_uri;
 
-        return $this->perform_upload_tus($file_path, $file_size, $attempt);
+        return $this->perform_upload_tus($file_path, $file_size, $attempt, $options);
     }
 
     /**
