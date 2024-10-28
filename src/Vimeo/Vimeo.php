@@ -63,8 +63,23 @@ class Vimeo
      * @param string|null $access_token Your access token. Can be found on developer.vimeo.com/apps or generated using OAuth 2.
      * @param TusClientFactory|null $tus_client_interface Your tus client that will be used.
      */
-    public function __construct(string $client_id, string $client_secret, string $access_token = null, TusClientFactory $tus_client_factory = null)
+    public function __construct(string $client_id,
+        string $client_secret,
+        string $access_token = null,
+        TusClientFactory $tus_client_factory = null,
+        $proxyHost = null,
+        $proxyPort = null,
+        )
     {
+
+        // Set proxy if exists
+        if ($proxyHost) {
+            $this->CURL_DEFAULTS[CURLOPT_PROXY] = $proxyHost;
+            if ($proxyPort) {
+                $this->CURL_DEFAULTS[CURLOPT_PROXYPORT] = $proxyPort;
+            }
+        }
+
         $this->_client_id = $client_id;
         $this->_client_secret = $client_secret;
         $this->_access_token = $access_token;
@@ -318,7 +333,7 @@ class Vimeo
      * @throws VimeoRequestException
      * @throws VimeoUploadException
      */
-    public function upload($file_path, array $params = array())
+    public function upload($file_path, array $params = array(), array $options = array())
     {
         // Validate that our file is real.
         if (!is_file($file_path)) {
@@ -340,7 +355,7 @@ class Vimeo
             throw new VimeoUploadException('Unable to initiate an upload.' . $attempt_error);
         }
 
-        return $this->perform_upload_tus($file_path, $file_size, $attempt);
+        return $this->perform_upload_tus($file_path, $file_size, $attempt, $options);
     }
 
     /**
@@ -579,7 +594,7 @@ class Vimeo
      * @return string
      * @throws VimeoUploadException
      */
-    private function perform_upload_tus(string $file_path, $file_size, array $attempt): string
+    private function perform_upload_tus(string $file_path, $file_size, array $attempt, $options): string
     {
         $default_chunk_size = (100 * 1024 * 1024); // 100 MB
 
@@ -596,7 +611,7 @@ class Vimeo
         $failures = 0;
         $chunk_size = $this->getTusUploadChunkSize($default_chunk_size, (int)$file_size);
 
-        $client = $this->_tus_client_factory->getTusClient($base_url, $url);
+        $client = $this->_tus_client_factory->getTusClient($base_url, $url, $options);
         $client->setApiPath($api_path);
         $client->setKey($key)->file($file_path);
         $client->getCache()->set($client->getKey(),[
