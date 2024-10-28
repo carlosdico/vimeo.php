@@ -1,13 +1,13 @@
 {
     "name": "carlosdico/vimeo-api",
     "description": "Fork Official PHP library for the Vimeo API.",
-    "homepage": "https://github.com/vimeo/vimeo.php",
+    "homepage": "https://github.com/carlosdico/vimeo.php",
     "keywords": ["vimeo", "video"],
     "license": "Apache-2.0",
     "authors": [
         {
-            "name": "Vimeo",
-            "homepage": "http://vimeo.com"
+            "name": "carlosdico",
+            "homepage": "http://carlosdico.com"
         }
     ],
     "minimum-stability": "stable",
