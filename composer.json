@@ -38,5 +38,12 @@
             "psalm",
             "phpunit"
         ]
+    },
+    "extra": {
+    "laravel": {
+        "providers": [
+            "Vimeo\\VimeoServiceProvider"
+        ]
     }
+}
 }
