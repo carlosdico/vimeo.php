@@ -4,7 +4,7 @@ namespace Vimeo;
 
 use Illuminate\Support\ServiceProvider;
 
-class TuPaqueteServiceProvider extends ServiceProvider
+class VimeoServiceProvider extends ServiceProvider
 {
     public function register()
     {
